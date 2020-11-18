@@ -51,7 +51,24 @@ function searchMeal(e) {
 // fetch meals by id
 
 function getMealById(id) {
+  mealsEl.innerHTML = "";
+  resultHeading.innerHTML = "";
   fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
+    .then((res) => res.json())
+    .then((data) => {
+      const meal = data.meals[0];
+      addMealToDOM(meal);
+    });
+}
+
+// get random meal from fetch API
+
+function getRandomMeal() {
+  // clear meals and heading
+  mealsEl.innerHTML = "";
+  resultHeading.innerHTML = "";
+
+  fetch("https://www.themealdb.com/api/json/v1/1/random.php")
     .then((res) => res.json())
     .then((data) => {
       const meal = data.meals[0];
@@ -73,7 +90,7 @@ function addMealToDOM(meal) {
     }
   }
   single_mealEl.innerHTML = `
-  <div class="single-meal">
+  <div class="single-meal" >
   <h1>${meal.strMeal}</h1>
   <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
   <div class="single-meal-info">
@@ -106,3 +123,5 @@ mealsEl.addEventListener("click", (e) => {
     getMealById(mealID);
   }
 });
+
+random.addEventListener("click", getRandomMeal);
